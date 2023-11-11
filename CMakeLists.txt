@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.14.0)
-set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13 CACHE STRING "")
 
-set(vst3sdk_SOURCE_DIR "C:/Users/louis/Desktop/VSTDELAMOUR/SDK/vst3sdk")
+set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13 CACHE STRING "")
+set(vst3sdk_SOURCE_DIR "vst3sdk" CACHE PATH "Path to VST3 SDK")
+
 if(NOT vst3sdk_SOURCE_DIR)
     message(FATAL_ERROR "Path to VST3 SDK is empty!")
 endif()
@@ -15,7 +16,11 @@ project(Control_Master
 )
 
 set(SMTG_VSTGUI_ROOT "${vst3sdk_SOURCE_DIR}")
-set(SMTG_CREATE_PLUGIN_LINK "0")
+set(SMTG_CREATE_PLUGIN_LINK OFF)
+set(SMTG_ENABLE_VST3_PLUGIN_EXAMPLES OFF)
+set(SMTG_ENABLE_VST3_HOSTING_EXAMPLES OFF)
+set(SMTG_CREATE_BUNDLE_FOR_WINDOWS ON)
+set(SMTG_ENABLE_VSTGUI_SUPPORT ON)
 
 add_subdirectory(${vst3sdk_SOURCE_DIR} ${PROJECT_BINARY_DIR}/vst3sdk)
 smtg_enable_vst3_sdk()
@@ -74,7 +79,7 @@ if(SMTG_MAC)
         "--pluginfolder;$(BUILT_PRODUCTS_DIR)"
     )
 elseif(SMTG_WIN)
-    target_sources(Control_Master PRIVATE 
+    target_sources(Control_Master PRIVATE
         resource/win32resource.rc
     )
     if(MSVC)
